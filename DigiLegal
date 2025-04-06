@@ -1,0 +1,37 @@
+import os
+
+from flask import Flask, send_file, request, render_template
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return send_file('src/index.html')
+    
+@app.route('/crime', methods=['GET', 'POST'])
+def crime():
+
+    res = ''
+    message="Refer to judge"
+    if request.method == 'POST':
+        for key, value in request.form.items():
+            print(f"{key}: {value}")
+            res += f"{key}: {value}<br>"
+
+        if request.form.get('crime').lower() == 'chain snatching':
+            message = 'BNS Section 304 :up to 3 years prison'
+        elif request.form.get('crime').lower() == 'theft':
+            message = "BNS Section 305:up to 7 years prison and fine"
+        
+        
+        res += "<br>" + message
+
+        return res
+
+
+
+def main():
+    app.run(port=int(os.environ.get('PORT', 80)))
+
+if __name__ == "__main__":
+    main()
